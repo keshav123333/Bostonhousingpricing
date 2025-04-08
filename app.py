@@ -25,6 +25,16 @@ def predict_api():
     output=model.predict(new_data)
     return jsonify(output[0])
 
+@app.route('/predict',methods=['POST'])
+def predict():
+    #here iam getting values from the form and converting them into a list of float
+    data=[float(x) for x in request.form.values()]
+    # Transform the data using the scaler
+    final_input=scalar.transform(np.array(data).reshape(1,-1))
+    output=model.predict(final_input)
+    return render_template('index.html',prediction_text="the predicted value is {}".format(output[0]))
+
+
 
 if __name__=="__main__":
     app.run(debug=True)
